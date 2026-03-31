@@ -1,7 +1,10 @@
 # Visual Structure Stability Prediction — Dacon Monthly AI Competition
 
 > **[월간 데이콘] 구조물 안정성 물리 추론 AI 경진대회**
-> 평가 지표: Log Loss (낮을수록 우수) · Public Best: **0.0291** · Private Best: **0.0466**
+> 알고리즘 | 월간 데이콘 | Physics AI | Vision AI | 시각 기반 물리 이해 | 구조 안정성 예측
+>
+> 평가 지표: Log Loss (낮을수록 우수)
+> Public Best: **0.0291** · Private Best: **0.0466**
 
 ---
 
@@ -21,8 +24,7 @@
 12. [Training Configuration](#training-configuration)
 13. [How to Run](#how-to-run)
 14. [Results](#results)
-15. [GitHub & Data Sharing Policy](#github--data-sharing-policy)
-16. [Dependencies](#dependencies)
+15. [Dependencies](#dependencies)
 
 ---
 
@@ -62,7 +64,7 @@
 
 ## Qualitative Examples
 
-라벨 의미와 입력 형태를 한 번에 보여주기 위해, 대표 샘플 2개(`stable` / `unstable`)를 정성 예시로 배치했습니다. 각 샘플은 `front.png`, `top.png`, 그리고 10초 시뮬레이션 GIF로 구성됩니다.
+라벨 의미와 입력 형태를 한 번에 보여주기 위해, 대표 샘플 2개(`stable` / `unstable`)를 예시 이미지로 배치했습니다. 각 샘플은 `front.png`, `top.png`, 그리고 10초 시뮬레이션 GIF로 구성됩니다.
 
 <table>
   <thead>
@@ -88,8 +90,6 @@
     </tr>
   </tbody>
 </table>
-
-> 위 예시는 설명용 정성 샘플이며, 실제 학습 데이터에는 동일한 쌍의 `front.png`, `top.png`, `simulation.mp4`가 제공됩니다.
 
 ---
 
