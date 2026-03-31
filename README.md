@@ -9,15 +9,16 @@
 
 1. [Overview](#overview)
 2. [Problem Definition](#problem-definition)
-3. [Dataset](#dataset)
-4. [Solution Architecture](#solution-architecture)
-5. [Project Structure](#project-structure)
-6. [Pipeline Flow](#pipeline-flow)
-7. [Key Implementation Details](#key-implementation-details)
-8. [Training Configuration](#training-configuration)
-9. [How to Run](#how-to-run)
-10. [Results](#results)
-11. [Dependencies](#dependencies)
+3. [Qualitative Examples](#qualitative-examples)
+4. [Dataset](#dataset)
+5. [Solution Architecture](#solution-architecture)
+6. [Project Structure](#project-structure)
+7. [Pipeline Flow](#pipeline-flow)
+8. [Key Implementation Details](#key-implementation-details)
+9. [Training Configuration](#training-configuration)
+10. [How to Run](#how-to-run)
+11. [Results](#results)
+12. [Dependencies](#dependencies)
 
 ---
 
@@ -44,6 +45,37 @@
 | **레이블** | `stable`: 10초간 의미 있는 이동 없음 / `unstable`: 누적 이동 ≥ 1.5 cm 또는 붕괴 |
 | **평가 지표** | Log Loss |
 | **목표 범위** | 0.015 ≤ LogLoss ≤ 0.030 |
+
+## Qualitative Examples
+
+라벨 의미와 입력 형태를 한 번에 보여주기 위해, 대표 샘플 2개(`stable` / `unstable`)를 정성 예시로 배치했습니다. 각 샘플은 `front.png`, `top.png`, 그리고 10초 시뮬레이션 GIF로 구성됩니다.
+
+<table>
+  <thead>
+    <tr>
+      <th>Label</th>
+      <th>Front View</th>
+      <th>Top View</th>
+      <th>Simulation GIF</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Stable</strong></td>
+      <td><img src="assets/readme/qualitative/stable_front.png" width="180" alt="Stable sample front view"></td>
+      <td><img src="assets/readme/qualitative/stable_top.png" width="180" alt="Stable sample top view"></td>
+      <td><img src="assets/readme/qualitative/stable_simulation.gif" width="180" alt="Stable sample simulation GIF"></td>
+    </tr>
+    <tr>
+      <td><strong>Unstable</strong></td>
+      <td><img src="assets/readme/qualitative/unstable_front.png" width="180" alt="Unstable sample front view"></td>
+      <td><img src="assets/readme/qualitative/unstable_top.png" width="180" alt="Unstable sample top view"></td>
+      <td><img src="assets/readme/qualitative/unstable_simulation.gif" width="180" alt="Unstable sample simulation GIF"></td>
+    </tr>
+  </tbody>
+</table>
+
+> 위 예시는 설명용 정성 샘플이며, 실제 학습 데이터에는 동일한 쌍의 `front.png`, `top.png`, `simulation.mp4`가 제공됩니다.
 
 ---
 
