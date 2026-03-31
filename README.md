@@ -1,24 +1,37 @@
 # Visual Structure Stability Prediction — Dacon Monthly AI Competition
 
-> **[월간 데이콘] 시각 기반 구조물 안정성 예측 AI 모델 개발**
-> 평가 지표: Log Loss (낮을수록 우수) · Best Score: **0.041**
+> **[월간 데이콘] 구조물 안정성 물리 추론 AI 경진대회**
+> 평가 지표: Log Loss (낮을수록 우수) · Public Best: **0.0291** · Private Best: **0.0466**
 
 ---
 
 ## Table of Contents
 
-1. [Overview](#overview)
-2. [Problem Definition](#problem-definition)
-3. [Qualitative Examples](#qualitative-examples)
+1. [Competition Background](#competition-background)
+2. [Overview](#overview)
+3. [Problem Definition](#problem-definition)
 4. [Dataset](#dataset)
-5. [Solution Architecture](#solution-architecture)
-6. [Project Structure](#project-structure)
-7. [Pipeline Flow](#pipeline-flow)
-8. [Key Implementation Details](#key-implementation-details)
-9. [Training Configuration](#training-configuration)
-10. [How to Run](#how-to-run)
-11. [Results](#results)
-12. [Dependencies](#dependencies)
+5. [Evaluation Metric](#evaluation-metric)
+6. [Competition Rules](#competition-rules)
+7. [Solution Architecture](#solution-architecture)
+8. [Project Structure](#project-structure)
+9. [Pipeline Flow](#pipeline-flow)
+10. [Key Implementation Details](#key-implementation-details)
+11. [Training Configuration](#training-configuration)
+12. [How to Run](#how-to-run)
+13. [Results](#results)
+14. [GitHub & Data Sharing Policy](#github--data-sharing-policy)
+15. [Dependencies](#dependencies)
+
+---
+
+## Competition Background
+
+최근 인공지능 기술은 단순한 시각적 패턴 인식을 넘어, 이미지로부터 **물리적 상태와 동적 변화를 추론**하는 방향으로 빠르게 확장되고 있습니다. 특히 구조물의 안정성 판단과 붕괴 예측은 건설·로보틱스·시뮬레이션·재난 안전 분야에서 핵심 기술로 주목받고 있습니다.
+
+구조물의 안정성은 외형적 기울기나 단순 형태 특징만으로는 충분히 설명하기 어렵습니다. **무게중심의 미세한 편차**, **층별 하중 분포**, **구조적 배치 패턴** 등 다양한 물리 요소가 종합적으로 작용하여 결과를 결정합니다.
+
+본 대회는 다각도 구조물 이미지를 기반으로, 시각 정보를 통해 구조물의 물리적 안정성과 붕괴 가능성을 추론하는 AI 모델 개발을 목표로 하며, **구조적 형태와 물리적 관계를 함께 고려하는 정밀한 분석**이 요구됩니다.
 
 ---
 
@@ -45,6 +58,8 @@
 | **레이블** | `stable`: 10초간 의미 있는 이동 없음 / `unstable`: 누적 이동 ≥ 1.5 cm 또는 붕괴 |
 | **평가 지표** | Log Loss |
 | **목표 범위** | 0.015 ≤ LogLoss ≤ 0.030 |
+
+---
 
 ## Qualitative Examples
 
@@ -83,25 +98,107 @@
 
 ```
 open/
-├── train.csv                    # 1,000개 샘플 (label 포함)
-├── dev.csv                      # 100개 샘플 (label 포함, 랜덤 환경)
-├── sample_submission.csv        # 1,000개 테스트 ID
-├── train/
+├── train.csv                    # 학습 데이터 ID 및 라벨 (id, label)
+├── dev.csv                      # 검증 데이터 ID 및 라벨 (id, label)
+├── sample_submission.csv        # 제출 양식 (id, unstable_prob, stable_prob)
+├── train/                       # 고정 실험실 환경 — 1,000개
 │   └── {TRAIN_XXXX}/
-│       ├── front.png            # 정면 이미지
-│       ├── top.png              # 상단 이미지
-│       └── simulation.mp4       # 10초 물리 시뮬레이션 영상 (학습 전용)
-├── dev/
+│       ├── front.png            # 정면/측면 시점 이미지
+│       ├── top.png              # 상단 시점 이미지
+│       └── simulation.mp4       # 10초 분량 물리 시뮬레이션 영상 (학습 전용)
+├── dev/                         # 무작위 광원·카메라 환경 — 100개 (test와 동일 설정)
 │   └── {DEV_XXXX}/
 │       ├── front.png
 │       └── top.png
-└── test/
+└── test/                        # 무작위 환경 — 1,000개 (모델 학습 불가)
     └── {TEST_XXXX}/
         ├── front.png
         └── top.png
 ```
 
+### 컬럼 상세
+
+| 파일 | 컬럼 | 설명 |
+|---|---|---|
+| `train.csv` / `dev.csv` | `id` | 샘플 고유 식별 번호 |
+| | `label` | 구조물 상태: `unstable`(불안정) / `stable`(안정) |
+| `sample_submission.csv` | `id` | 평가 데이터(Test) 고유 식별 번호 |
+| | `unstable_prob` | 불안정 상태 예측 확률 (0 ~ 1) |
+| | `stable_prob` | 안정 상태 예측 확률 (0 ~ 1) |
+
+### 레이블 정의
+
+| 레이블 | 조건 |
+|---|---|
+| `stable` | 시뮬레이션 시작 후 10초 동안 의미 있는 이동·변형 없음 |
+| `unstable` | 10초 이내 누적 이동 거리 **≥ 1.5 cm** 또는 구조적 붕괴 발생 |
+
+> **경계 샘플(Boundary)**: 일부 샘플은 외형만으로 안정 여부를 구분하기 어렵게 설계되어, 시각 정보 기반의 정밀한 물리 추론이 요구됩니다.
+
 > `simulation.mp4` (train 전용): 프레임 간 픽셀 차이 분석으로 `max_diff`, `mean_diff`, 이동 발생 시점(onset), 심각도(severity) 등의 **보조 지도 신호(auxiliary supervision)**를 추출하는 데 사용됩니다.
+
+---
+
+## Evaluation Metric
+
+### Log Loss (낮을수록 우수)
+
+```python
+import numpy as np
+
+def LOGLOSS(true, pred, eps=1e-15):
+    pred = np.clip(pred, eps, 1 - eps)
+    pred = pred / np.sum(pred, axis=1).reshape(-1, 1)   # 행별 정규화
+    loss = -np.sum(true * np.log(pred), axis=1)
+    return np.mean(loss)
+```
+
+### 제출 파일 필수 조건
+
+- 컬럼 순서: **`id` → `unstable_prob` → `stable_prob`** (순서 불일치 시 오류)
+- 각 값: 0 이상 1 이하의 실수
+- **행마다 `unstable_prob + stable_prob = 1.0`** (위반 시 자동 정규화되어 의도와 다른 점수 산출)
+
+### Public / Private 분리
+
+| 구분 | 비율 | 목적 |
+|---|---|---|
+| **Public Score** | 테스트 데이터의 **50%** | 대회 중 실시간 순위 확인 |
+| **Private Score** | 테스트 데이터의 **100%** | 최종 순위 결정 기준 |
+
+> Public Score에만 과적합된 전략은 Private Score에서 역전될 수 있습니다.
+
+### 2단계 평가
+
+1. **1차 평가**: 리더보드 Private Score 100% 반영
+2. **2차 평가**: Private Score 상위 10팀 → 코드 + PPT 제출 → 코드 검증 후 수상자 결정
+
+---
+
+## Competition Rules
+
+### 사전학습 모델
+
+- 공식적으로 가중치가 공개된 모델 중 **상업적·비상업적 이용이 허용된 라이선스** (MIT, Apache 2.0, CC BY, CC BY-NC 등)만 사용 가능
+- 사용·수정·재배포가 제한된 라이선스 모델은 사용 불가
+- 원격 API 기반 모델(OpenAI API, Gemini API 등) 사용 불가 — **로컬 실행 필수**
+
+> 본 프로젝트에서 사용한 `DINOv2 ViT-S/14 (dinov2_vits14_reg)`는 Apache 2.0 라이선스로 배포된 모델입니다. ✅
+
+### 외부 데이터
+
+- 대회 제공 학습(train)·개발(dev) 데이터 외 **외부 데이터 사용 허용**
+- **단, 평가 데이터(test)는 어떠한 형태로도 모델 학습에 활용 불가**
+
+> 본 프로젝트는 외부 데이터 없이 대회 제공 데이터만 사용하였습니다.
+
+### 코드 제출 기준 (2차 평가 대상자)
+
+- 데이터 입/출력 경로: **상대 경로** 사용
+- 코드·주석 인코딩: **UTF-8**
+- 모든 코드 오류 없이 실행 가능해야 함
+- 개발 환경(OS) 및 라이브러리 버전 명시
+- 제출 코드로 **Private Score 재현 가능**해야 함
 
 ---
 
@@ -405,12 +502,26 @@ runs/final/
 
 ## Results
 
-| 지표 | 값 |
+### 리더보드 점수
+
+| 제출 파일 | 제출 일시 | Public Score | Private Score | 비고 |
+|---|---|---|---|---|
+| submission (6).csv | 2026-03-31 00:59 | 0.0291 | **0.0466** | 최고 Private |
+| submission_backup_20260329_204235.csv | 2026-03-30 05:43 | 0.0375 | - | **최종 선택** ★ |
+| submission_0330_0330.csv | 2026-03-30 10:45 | 0.0378 | - | |
+| submission_backup_20260330_175818.csv | 2026-03-31 11:44 | 0.0483 | 0.0553 | 공-사 갭 최소 |
+
+> ★ Public Score 기준 대회 기간 중 최선 제출을 선택. Private Score 기준 최고는 `submission (6).csv` (0.0466).
+
+### 모델 구성 요약
+
+| 항목 | 값 |
 |---|---|
-| **Dev OOF Log Loss** | **0.041** |
-| 대회 목표 범위 | 0.015 ~ 0.030 |
 | 백본 | DINOv2 ViT-S/14 with Registers |
 | 앙상블 | 5-fold × TTA-4 |
+| 캘리브레이션 | Temperature Scaling (LBFGS) |
+| 도메인 갭 대응 | GRL (Gradient Reversal Layer) |
+| 물리 특징 | 기하학 14개 특징 (geometry_reasoning) |
 
 ---
 
@@ -428,9 +539,19 @@ runs/final/
 | `Pillow` | ≥ 10.0 | 이미지 로딩 및 변환 |
 | `tqdm` | ≥ 4.66 | 학습 진행 표시 |
 
+### 개발 환경
+
+| 항목 | 사양 |
+|---|---|
+| OS | Ubuntu 22.04 (Google Colab) |
+| Python | 3.10+ |
+| GPU | NVIDIA A100 (Colab) |
+| CUDA | 11.8+ |
+
 ---
 
 ## License
 
 본 코드는 Dacon 월간 데이콘 대회 참가 목적으로 작성되었습니다.
 외부 데이터를 사용하지 않았으며, 대회 제공 데이터만 활용하였습니다.
+데이콘 제공 데이터는 본 리포지토리에 포함되지 않습니다.
