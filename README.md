@@ -1,9 +1,10 @@
 # Visual Structure Stability Prediction — Dacon Monthly AI Competition
 
-> **[월간 데이콘] 구조물 안정성 물리 추론 AI 경진대회**
-> 알고리즘 | 월간 데이콘 | Physics AI | Vision AI | 시각 기반 물리 이해 | 구조 안정성 예측
+> **[월간 데이콘] 구조물 안정성 물리 추론 AI 경진대회**<br>
+> 알고리즘 | 월간 데이콘 | Physics AI
+> Vision AI | 시각 기반 물리 이해 | 구조 안정성 예측
 >
-> 평가 지표: Log Loss (낮을수록 우수)
+> 평가 지표: Log Loss (낮을수록 우수)<br>
 > Public Best: **0.0291** · Private Best: **0.0466**
 
 ---
