@@ -4,8 +4,7 @@
 > 알고리즘 | 월간 데이콘 | Physics AI
 > Vision AI | 시각 기반 물리 이해 | 구조 안정성 예측
 >
-> 평가 지표: Log Loss (낮을수록 우수)<br>
-> Public Best: **0.0291** · Private Best: **0.0466**
+> 평가 지표: Log Loss (낮을수록 우수) · Public Best: **0.0291** · Private Best: **0.0466**
 
 ---
 
