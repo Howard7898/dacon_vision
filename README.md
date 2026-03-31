@@ -10,18 +10,19 @@
 1. [Competition Background](#competition-background)
 2. [Overview](#overview)
 3. [Problem Definition](#problem-definition)
-4. [Dataset](#dataset)
-5. [Evaluation Metric](#evaluation-metric)
-6. [Competition Rules](#competition-rules)
-7. [Solution Architecture](#solution-architecture)
-8. [Project Structure](#project-structure)
-9. [Pipeline Flow](#pipeline-flow)
-10. [Key Implementation Details](#key-implementation-details)
-11. [Training Configuration](#training-configuration)
-12. [How to Run](#how-to-run)
-13. [Results](#results)
-14. [GitHub & Data Sharing Policy](#github--data-sharing-policy)
-15. [Dependencies](#dependencies)
+4. [Qualitative Examples](#qualitative-examples)
+5. [Dataset](#dataset)
+6. [Evaluation Metric](#evaluation-metric)
+7. [Competition Rules](#competition-rules)
+8. [Solution Architecture](#solution-architecture)
+9. [Project Structure](#project-structure)
+10. [Pipeline Flow](#pipeline-flow)
+11. [Key Implementation Details](#key-implementation-details)
+12. [Training Configuration](#training-configuration)
+13. [How to Run](#how-to-run)
+14. [Results](#results)
+15. [GitHub & Data Sharing Policy](#github--data-sharing-policy)
+16. [Dependencies](#dependencies)
 
 ---
 
@@ -58,6 +59,37 @@
 | **레이블** | `stable`: 10초간 의미 있는 이동 없음 / `unstable`: 누적 이동 ≥ 1.5 cm 또는 붕괴 |
 | **평가 지표** | Log Loss |
 | **목표 범위** | 0.015 ≤ LogLoss ≤ 0.030 |
+
+## Qualitative Examples
+
+라벨 의미와 입력 형태를 한 번에 보여주기 위해, 대표 샘플 2개(`stable` / `unstable`)를 정성 예시로 배치했습니다. 각 샘플은 `front.png`, `top.png`, 그리고 10초 시뮬레이션 GIF로 구성됩니다.
+
+<table>
+  <thead>
+    <tr>
+      <th>Label</th>
+      <th>Front View</th>
+      <th>Top View</th>
+      <th>Simulation GIF</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Stable</strong></td>
+      <td><img src="assets/readme/qualitative/stable_front.png" width="180" alt="Stable sample front view"></td>
+      <td><img src="assets/readme/qualitative/stable_top.png" width="180" alt="Stable sample top view"></td>
+      <td><img src="assets/readme/qualitative/stable_simulation.gif" width="180" alt="Stable sample simulation GIF"></td>
+    </tr>
+    <tr>
+      <td><strong>Unstable</strong></td>
+      <td><img src="assets/readme/qualitative/unstable_front.png" width="180" alt="Unstable sample front view"></td>
+      <td><img src="assets/readme/qualitative/unstable_top.png" width="180" alt="Unstable sample top view"></td>
+      <td><img src="assets/readme/qualitative/unstable_simulation.gif" width="180" alt="Unstable sample simulation GIF"></td>
+    </tr>
+  </tbody>
+</table>
+
+> 위 예시는 설명용 정성 샘플이며, 실제 학습 데이터에는 동일한 쌍의 `front.png`, `top.png`, `simulation.mp4`가 제공됩니다.
 
 ---
 
