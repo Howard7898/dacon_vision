@@ -61,6 +61,39 @@
 
 ---
 
+## Qualitative Examples
+
+라벨 의미와 입력 형태를 한 번에 보여주기 위해, 대표 샘플 2개(`stable` / `unstable`)를 정성 예시로 배치했습니다. 각 샘플은 `front.png`, `top.png`, 그리고 10초 시뮬레이션 GIF로 구성됩니다.
+
+<table>
+  <thead>
+    <tr>
+      <th>Label</th>
+      <th>Front View</th>
+      <th>Top View</th>
+      <th>Simulation GIF</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Stable</strong></td>
+      <td><img src="assets/readme/qualitative/stable_front.png" width="180" alt="Stable sample front view"></td>
+      <td><img src="assets/readme/qualitative/stable_top.png" width="180" alt="Stable sample top view"></td>
+      <td><img src="assets/readme/qualitative/stable_simulation.gif" width="180" alt="Stable sample simulation GIF"></td>
+    </tr>
+    <tr>
+      <td><strong>Unstable</strong></td>
+      <td><img src="assets/readme/qualitative/unstable_front.png" width="180" alt="Unstable sample front view"></td>
+      <td><img src="assets/readme/qualitative/unstable_top.png" width="180" alt="Unstable sample top view"></td>
+      <td><img src="assets/readme/qualitative/unstable_simulation.gif" width="180" alt="Unstable sample simulation GIF"></td>
+    </tr>
+  </tbody>
+</table>
+
+> 위 예시는 설명용 정성 샘플이며, 실제 학습 데이터에는 동일한 쌍의 `front.png`, `top.png`, `simulation.mp4`가 제공됩니다.
+
+---
+
 ## Dataset
 
 ```
