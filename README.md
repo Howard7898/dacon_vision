@@ -1,10 +1,7 @@
 # Visual Structure Stability Prediction — Dacon Monthly AI Competition
 
-> **[월간 데이콘] 구조물 안정성 물리 추론 AI 경진대회**<br>
-> 알고리즘 | 월간 데이콘 | Physics AI
-> Vision AI | 시각 기반 물리 이해 | 구조 안정성 예측
->
-> 평가 지표: Log Loss (낮을수록 우수) · Public Best: **0.0291** · Private Best: **0.0466**
+> **[월간 데이콘] 구조물 안정성 물리 추론 AI 경진대회**
+> 평가 지표: Log Loss (낮을수록 우수) · Public Best: **0.0291** · 선택 제출: **0.0375**
 
 ---
 
@@ -13,17 +10,17 @@
 1. [Competition Background](#competition-background)
 2. [Overview](#overview)
 3. [Problem Definition](#problem-definition)
-4. [Qualitative Examples](#qualitative-examples)
-5. [Dataset](#dataset)
-6. [Evaluation Metric](#evaluation-metric)
-7. [Competition Rules](#competition-rules)
-8. [Solution Architecture](#solution-architecture)
-9. [Project Structure](#project-structure)
-10. [Pipeline Flow](#pipeline-flow)
-11. [Key Implementation Details](#key-implementation-details)
-12. [Training Configuration](#training-configuration)
-13. [How to Run](#how-to-run)
-14. [Results](#results)
+4. [Dataset](#dataset)
+5. [Evaluation Metric](#evaluation-metric)
+6. [Competition Rules](#competition-rules)
+7. [Solution Architecture](#solution-architecture)
+8. [Project Structure](#project-structure)
+9. [Pipeline Flow](#pipeline-flow)
+10. [Key Implementation Details](#key-implementation-details)
+11. [Training Configuration](#training-configuration)
+12. [How to Run](#how-to-run)
+13. [Results](#results)
+14. [GitHub & Data Sharing Policy](#github--data-sharing-policy)
 15. [Dependencies](#dependencies)
 
 ---
@@ -61,35 +58,6 @@
 | **레이블** | `stable`: 10초간 의미 있는 이동 없음 / `unstable`: 누적 이동 ≥ 1.5 cm 또는 붕괴 |
 | **평가 지표** | Log Loss |
 | **목표 범위** | 0.015 ≤ LogLoss ≤ 0.030 |
-
-## Qualitative Examples
-
-라벨 의미와 입력 형태를 한 번에 보여주기 위해, 대표 샘플 2개(`stable` / `unstable`)를 예시 이미지로 배치했습니다. 각 샘플은 `front.png`, `top.png`, 그리고 10초 시뮬레이션 GIF로 구성됩니다.
-
-<table>
-  <thead>
-    <tr>
-      <th>Label</th>
-      <th>Front View</th>
-      <th>Top View</th>
-      <th>Simulation GIF</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><strong>Stable</strong></td>
-      <td><img src="assets/readme/qualitative/stable_front.png" width="180" alt="Stable sample front view"></td>
-      <td><img src="assets/readme/qualitative/stable_top.png" width="180" alt="Stable sample top view"></td>
-      <td><img src="assets/readme/qualitative/stable_simulation.gif" width="180" alt="Stable sample simulation GIF"></td>
-    </tr>
-    <tr>
-      <td><strong>Unstable</strong></td>
-      <td><img src="assets/readme/qualitative/unstable_front.png" width="180" alt="Unstable sample front view"></td>
-      <td><img src="assets/readme/qualitative/unstable_top.png" width="180" alt="Unstable sample top view"></td>
-      <td><img src="assets/readme/qualitative/unstable_simulation.gif" width="180" alt="Unstable sample simulation GIF"></td>
-    </tr>
-  </tbody>
-</table>
 
 ---
 
@@ -278,6 +246,11 @@ def LOGLOSS(true, pred, eps=1e-15):
 ```
 physics_solution/
 │
+├── .gitignore                     # 데이터·캐시·모델 가중치 Git 제외 설정
+├── README.md                      # 본 문서
+├── PIPELINE_ANALYSIS.md           # 파이프라인 상세 분석 문서
+├── requirements-mac.txt           # Python 패키지 의존성 목록
+│
 ├── full_physics_solution.py       # 핵심 파이프라인 (학습·추론·제출 생성)
 │   ├── extract-motion             #   서브커맨드: 영상 → motion_targets.csv 추출
 │   ├── train-design               #   서브커맨드: train→dev 단일 폴드 설계 검증
@@ -285,19 +258,23 @@ physics_solution/
 │   ├── make-submission            #   서브커맨드: 저장된 모델로 제출 파일 생성
 │   └── full-run                   #   서브커맨드: 위 전체 자동 실행 (권장)
 │
-├── run_colab_oneclick.py          # Google Colab 원클릭 실행기
-│                                  # (Drive 마운트 · 패키지 설치 · zip 복사 ·
-│                                  #  압축 해제 · 파이프라인 호출 · 결과 백업)
-│
-├── run_colab_oneclick.sh          # run_colab_oneclick.py 의 bash 래퍼
-│
 ├── checkerboard_rectification.py  # 상단뷰 회전 정규화 모듈
-│
 ├── geometry_reasoning.py          # 물리 기반 기하학 특징 추출 모듈
 │
-├── patch_weight_decay.py          # weight-decay 인자 하위 호환 패치 유틸
+├── run_colab_oneclick.py          # Google Colab 원클릭 실행기
+├── run_colab_oneclick.sh          # run_colab_oneclick.py 의 bash 래퍼
+├── make_colab_bundle.sh           # Colab 업로드용 프로젝트 zip 생성 스크립트
 │
-└── 0329_0.05_DINO_re (1).ipynb    # 최종 Colab 실행 노트북
+├── bootstrap_mac_env.sh           # Mac 로컬 환경 셋업 (.venv 생성 + 패키지 설치)
+├── train.command                  # Mac 더블클릭 실행 — 학습 + 제출 파이프라인
+├── full_pipeline.command          # Mac 더블클릭 실행 — 전체 파이프라인 (동일)
+│
+└── archive/                       # 역할 종료 파일 보존 (실행에 불필요)
+    ├── patch_weight_decay.py      #   weight-decay 패치 유틸 (이미 통합됨)
+    ├── infer.command              #   존재하지 않는 서브커맨드 호출
+    ├── PhysicsSolution_Colab_OneClick.ipynb  # 구버전 노트북
+    ├── README_COLAB.md            #   README.md에 통합됨
+    └── checkerboard_eval_summary.md          # 개발 메모
 ```
 
 ---
@@ -420,13 +397,13 @@ pip install torch torchvision tqdm numpy pandas scikit-learn \
 
 ### A. Google Colab (권장)
 
-**노트북 파일**: `0329_0.05_DINO_re (1).ipynb`
+**노트북 파일**: `0329_0.05_DINO_re (1).ipynb` *(별도 보관, 프로젝트 폴더 외)*
 
 Drive에 아래 두 파일을 업로드한 뒤 셀을 순서대로 실행합니다.
 
 ```
 /MyDrive/daCon/
-├── physics_solution_0328.zip   # 본 프로젝트 코드
+├── physics_solution_0328.zip   # 본 프로젝트 코드 (make_colab_bundle.sh 로 생성)
 └── open.zip                    # 데이콘 제공 데이터셋
 ```
 
@@ -438,8 +415,8 @@ Drive에 아래 두 파일을 업로드한 뒤 셀을 순서대로 실행합니�
 | 3 | zip 존재 확인 |
 | 4 | 프로젝트 코드 압축 해제 및 로컬 배치 |
 | 5 | 파일 목록 확인 |
-| 6 | `--use-domain-head` 패치 (run_colab_oneclick.py 자동 수정) |
-| 7 | 사전 점검 (키워드 grep) |
+| 6 | `--use-domain-head` 지원 여부 확인 (이미 네이티브 지원 — 자동 스킵) |
+| 7 | 사전 점검 (핵심 키워드 grep) |
 | **8** | **파이프라인 실행** ← 핵심 |
 | 9 | `submission.csv` Drive 백업 |
 
@@ -477,6 +454,9 @@ bash run_colab_oneclick.sh \
     --image-size 336 \
     --batch-size 16 \
     --epochs 30 \
+    --tta-passes 4 \
+    --backbone-lr 1e-5 \
+    --weight-decay 1e-4 \
     --use-domain-head \
     --enable-geometry-reasoning \
     --refresh-motion
@@ -501,26 +481,70 @@ runs/final/
 
 ## Results
 
-### 리더보드 점수
+### 최종 순위
+
+| 항목 | 값 |
+|---|---|
+| **최종 순위** | **70위** (전체 참가자 중) |
+| **선택 제출 Public Score** | **0.0375** |
+| **Best Public Score** | **0.0291** |
+
+> 대회 종료 기준 (2026-03-31). 코드 검증 대상(Top 10)은 아니나, LogLoss 0.04대는 DINOv2 기반 멀티태스크 + 도메인 적응 전략의 유효성을 입증한 수치입니다.
+
+### 제출 이력
 
 | 제출 파일 | 제출 일시 | Public Score | Private Score | 비고 |
 |---|---|---|---|---|
-| submission (6).csv | 2026-03-31 00:59 | 0.0291 | **0.0466** | 최고 Private |
-| submission_backup_20260329_204235.csv | 2026-03-30 05:43 | 0.0375 | - | **최종 선택** ★ |
+| submission (6).csv | 2026-03-31 00:59 | **0.0291** | 0.0466 | 최고 Public |
+| submission_backup_20260329_204235.csv | 2026-03-30 05:43 | 0.0375 | - | **최종 선택 ★** |
 | submission_0330_0330.csv | 2026-03-30 10:45 | 0.0378 | - | |
-| submission_backup_20260330_175818.csv | 2026-03-31 11:44 | 0.0483 | 0.0553 | 공-사 갭 최소 |
+| submission_backup_20260330_175818.csv | 2026-03-31 11:44 | 0.0483 | 0.0553 | Public·Private 갭 최소 |
 
-> ★ Public Score 기준 대회 기간 중 최선 제출을 선택. Private Score 기준 최고는 `submission (6).csv` (0.0466).
+> ★ 최종 선택 제출: `submission_backup_20260329_204235.csv` (Public 0.0375)
 
 ### 모델 구성 요약
 
 | 항목 | 값 |
 |---|---|
-| 백본 | DINOv2 ViT-S/14 with Registers |
-| 앙상블 | 5-fold × TTA-4 |
-| 캘리브레이션 | Temperature Scaling (LBFGS) |
-| 도메인 갭 대응 | GRL (Gradient Reversal Layer) |
-| 물리 특징 | 기하학 14개 특징 (geometry_reasoning) |
+| 백본 | DINOv2 ViT-S/14 with Registers (Apache 2.0) |
+| 앙상블 | 5-fold Geometry-Grouped CV × TTA-4 |
+| 캘리브레이션 | Temperature Scaling (LBFGS 200 iter) |
+| 도메인 갭 대응 | Gradient Reversal Layer (GRL) |
+| 물리 특징 | 기하학 14개 특징 (`geometry_reasoning.py`) |
+| 보조 지도 신호 | 영상 기반 motion / onset / severity |
+
+---
+
+## GitHub & Data Sharing Policy
+
+### 코드 공유
+
+| 항목 | 허용 여부 | 비고 |
+|---|---|---|
+| 본 프로젝트 Python 코드 (`*.py`, `*.sh`, `*.ipynb`) | ✅ **공유 가능** | 대회 종료 후 GitHub 업로드 허용 |
+| 사전학습 모델 가중치 (`dinov2_vits14_reg`) | ✅ **공유 가능** | Apache 2.0 라이선스 |
+| 학습된 체크포인트 (`best_model.pt`) | ⚠️ 선택 사항 | 파일 크기 고려 (LFS 권장) |
+| 데이콘 제공 데이터 (`train/`, `dev/`, `test/`, `*.csv`) | ❌ **공유 불가** | Dacon 이용약관 위반 |
+| `simulation.mp4` 영상 원본 | ❌ **공유 불가** | 데이콘 제공 데이터 해당 |
+
+### 데이터 공유 정책
+
+데이콘 이용약관에 따라 **대회 제공 데이터는 어떠한 형태로도 공개 저장소에 업로드할 수 없습니다.**
+
+- `open/` 디렉토리 전체 (이미지, CSV, 영상) — 공유 금지
+- `motion_targets.csv` — 영상 분석으로 생성된 파일이나, 원본 데이터 파생물이므로 공유 금지
+
+> 본 리포지토리의 `.gitignore`에 `data/`, `open/`, `*.mp4`, `open*.csv`, `motion_targets.csv`를 명시하여 데이터 파일이 실수로 커밋되지 않도록 설정하였습니다.
+
+### 오픈소스 라이선스
+
+| 구성 요소 | 라이선스 |
+|---|---|
+| 본 프로젝트 코드 | MIT (또는 개인 결정) |
+| `DINOv2 ViT-S/14 (dinov2_vits14_reg)` | **Apache 2.0** — 상업적 이용 허용 |
+| PyTorch / torchvision | BSD-style |
+| scikit-learn | BSD-3-Clause |
+| OpenCV | Apache 2.0 |
 
 ---
 

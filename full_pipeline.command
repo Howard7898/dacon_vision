@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
-# full_pipeline.command — macOS 더블클릭 실행용
-# v0.05 추천 파라미터 적용: batch-size 32, image-size 336, backbone-lr 2e-5,
-#                           weight-decay 5e-5, tta-passes 8, num-workers 4
+# full_pipeline.command — macOS 더블클릭 실행용 (전체 파이프라인)
+# 실제 제출 재현 파라미터:
+#   image-size 336, backbone-lr 1e-5, weight-decay 1e-4
+#   batch-size 16, epochs 30, tta-passes 4
+#   --use-domain-head, --enable-geometry-reasoning, --refresh-motion
 set -euo pipefail
 cd "$(dirname "$0")"
 
@@ -12,15 +14,18 @@ python full_physics_solution.py full-run \
     --out-dir ./runs/final \
     --backbone dinov2_vits14_reg \
     --image-size 336 \
-    --batch-size 32 \
-    --epochs 20 \
+    --batch-size 16 \
+    --epochs 30 \
     --num-folds 5 \
     --num-workers 4 \
-    --tta-passes 8 \
-    --backbone-lr 2e-5 \
+    --tta-passes 4 \
+    --backbone-lr 1e-5 \
     --warmup-epochs 3 \
-    --weight-decay 5e-5 \
-    --pretrained
+    --weight-decay 1e-4 \
+    --pretrained \
+    --use-domain-head \
+    --enable-geometry-reasoning \
+    --refresh-motion
 
 echo "✅ 파이프라인 완료"
 read -p "Press Enter to close..."
