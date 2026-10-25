@@ -1,0 +1,20 @@
+# Dacon data (redistribution prohibited)
+data/
+open/
+open*.zip
+open*.csv
+*.mp4
+motion_targets.csv
+
+# Outputs & weights
+runs/
+outputs/
+*.pt
+*.pth
+
+# Python / OS
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+.DS_Store

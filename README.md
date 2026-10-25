@@ -275,7 +275,7 @@ def LOGLOSS(true, pred, eps=1e-15):
 ## Project Structure
 
 ```
-physics_solution/
+dacon_vision/
 │
 ├── .gitignore                     # 데이터·캐시·모델 가중치 Git 제외 설정
 ├── README.md                      # 본 문서
@@ -428,7 +428,7 @@ pip install torch torchvision tqdm numpy pandas scikit-learn \
 
 ### A. Google Colab (권장)
 
-**노트북 파일**: `0329_0.05_DINO_re (1).ipynb` *(별도 보관, 프로젝트 폴더 외)*
+**노트북 파일**: `archive/PhysicsSolution_Colab_OneClick.ipynb`
 
 Drive에 아래 두 파일을 업로드한 뒤 셀을 순서대로 실행합니다.
 
@@ -520,7 +520,7 @@ runs/final/
 | **선택 제출 Public Score** | **0.0375** |
 | **Best Public Score** | **0.0291** |
 
-> 대회 종료 기준 (2026-03-31). 코드 검증 대상(Top 10)은 아니나, LogLoss 0.04대는 DINOv2 기반 멀티태스크 + 도메인 적응 전략의 유효성을 입증한 수치입니다.
+> 대회 종료 기준 (2026-03-31). 코드 검증 대상(Top 10)에는 포함되지 않았습니다.
 
 ### 제출 이력
 
@@ -571,7 +571,7 @@ runs/final/
 
 | 구성 요소 | 라이선스 |
 |---|---|
-| 본 프로젝트 코드 | MIT (또는 개인 결정) |
+| 본 프로젝트 코드 | MIT |
 | `DINOv2 ViT-S/14 (dinov2_vits14_reg)` | **Apache 2.0** — 상업적 이용 허용 |
 | PyTorch / torchvision | BSD-style |
 | scikit-learn | BSD-3-Clause |
